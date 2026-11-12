@@ -1,7 +1,7 @@
 
 import os
+import pickle
 
-import joblib
 import pandas as pd
 import streamlit as st
 
@@ -88,21 +88,29 @@ st.markdown(
 
 @st.cache_resource
 def load_model():
-    return joblib.load(MODEL_PATH)
+
+    with open(MODEL_PATH, "rb") as file:
+        return pickle.load(file)
 
 
 if not os.path.isfile(MODEL_PATH):
+
     st.error(
         "KNN model not found. Please check "
         "models/diamond_knn_pipeline.pkl"
     )
+
     st.stop()
 
+
 try:
+
     model = load_model()
 
 except Exception as e:
+
     st.error(f"Error loading KNN model: {e}")
+
     st.stop()
 
 
@@ -112,6 +120,7 @@ except Exception as e:
 
 @st.cache_data
 def load_comparison():
+
     return pd.read_csv(COMPARISON_PATH)
 
 
@@ -302,6 +311,7 @@ with tab1:
             use_container_width=True,
         )
 
+
     # ==============================================
     # PREDICTION LOGIC
     # ==============================================
@@ -324,29 +334,32 @@ with tab1:
 
         try:
 
-            # Check that measurements are reasonable
+            # Validate diamond measurements
 
             if x <= 0 or y <= 0 or z <= 0:
+
                 st.error(
                     "Diamond measurements must be greater than zero."
                 )
 
             elif x < y * 0.5 or x > y * 2:
+
                 st.warning(
                     "Please verify the diamond length and width."
                 )
 
             else:
 
-                # Generate prediction
+                # Generate KNN prediction
 
                 prediction = model.predict(input_data)
 
                 predicted_price = float(prediction[0])
 
-                if predicted_price < 0:
+                if not pd.notna(predicted_price) or predicted_price < 0:
+
                     st.error(
-                        "The model generated an invalid negative price."
+                        "The model generated an invalid price."
                     )
 
                 else:
@@ -660,14 +673,12 @@ with tab2:
 
                     st.info(
                         """
-                        The KNN Regressor is currently used for
-                        price prediction.
+                        Random Forest achieved the best
+                        performance in this model comparison.
 
-                        The comparison dashboard identifies the
-                        model with the lowest RMSE.
-
-                        The selected model can be used for final
-                        deployment after validating its performance.
+                        The KNN Regressor is used for the
+                        actual price prediction as required
+                        by the assignment.
                         """
                     )
 
@@ -716,7 +727,7 @@ st.divider()
 st.caption(
     """
     Developed using Python, Pandas, Scikit-learn,
-    Joblib and Streamlit.
+    Pickle and Streamlit.
     """
 )
 

@@ -1,9 +1,21 @@
-
+# Python cache
 __pycache__/
 *.py[cod]
+
+# Virtual environments
 .venv/
 venv/
 env/
+
+# Environment variables and secrets
 .env
 .streamlit/secrets.toml
+
+# Jupyter
 .ipynb_checkpoints/
+
+# Large model - keep locally, exclude from GitHub
+diamond_price_model.pkl
+
+# Operating system files
+.DS_Store
