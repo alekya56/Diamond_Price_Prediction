@@ -44,6 +44,9 @@ COMPARISON_PATH = os.path.join(
 st.markdown(
     """
     <style>
+
+    /* Main application background */
+
     .stApp {
         background-color: #f8f9fc;
         color: #243b53;
@@ -53,12 +56,47 @@ st.markdown(
         background-color: #f8f9fc;
     }
 
+    /* Main application text */
+
     [data-testid="stMarkdownContainer"] p,
     [data-testid="stMarkdownContainer"] li,
     label,
     h1, h2, h3, h4 {
         color: #243b53 !important;
     }
+
+    /* Sidebar background */
+
+    [data-testid="stSidebar"] {
+        background-color: #ffffff !important;
+    }
+
+    /* Sidebar text visibility */
+
+    [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p,
+    [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] li,
+    [data-testid="stSidebar"] h1,
+    [data-testid="stSidebar"] h2,
+    [data-testid="stSidebar"] h3,
+    [data-testid="stSidebar"] strong {
+        color: #243b53 !important;
+    }
+
+    /* Sidebar metric */
+
+    [data-testid="stSidebar"] [data-testid="stMetric"] {
+        background-color: #ffffff !important;
+        padding: 12px;
+        border-radius: 10px;
+        border: 1px solid #e5e7eb;
+    }
+
+    [data-testid="stSidebar"] [data-testid="stMetricValue"],
+    [data-testid="stSidebar"] [data-testid="stMetricLabel"] {
+        color: #243b53 !important;
+    }
+
+    /* Dashboard metric cards */
 
     [data-testid="stMetric"] {
         background-color: #ffffff;
@@ -73,10 +111,13 @@ st.markdown(
         color: #243b53 !important;
     }
 
+    /* Buttons */
+
     .stButton button {
         border-radius: 10px;
         font-weight: bold;
     }
+
     </style>
     """,
     unsafe_allow_html=True,
@@ -146,7 +187,7 @@ st.divider()
 
 
 # ==================================================
-# 7. SIDEBAR
+# 7. SIDEBAR - ABOUT PROJECT
 # ==================================================
 
 with st.sidebar:
@@ -157,35 +198,101 @@ with st.sidebar:
 
     st.write(
         """
-        This application predicts diamond prices based
-        on physical and quality characteristics.
-
-        **Machine Learning:** Regression
-
-        **Prediction Algorithm:** KNN Regressor
-
-        **Algorithms Compared:**
-        - Linear Regression
-        - Decision Tree
-        - Random Forest
-        - KNN
-
-        **Interface:** Streamlit
+        The Diamond Price Prediction System is an
+        end-to-end Machine Learning application
+        that predicts diamond prices based on their
+        physical characteristics and quality attributes.
         """
     )
 
     st.divider()
 
-    st.subheader("Project Information")
+    st.subheader("🤖 Machine Learning Details")
 
-    st.write("Dataset: Diamonds Dataset")
-    st.write("Training Split: 75%")
-    st.write("Testing Split: 25%")
+    st.write("**Machine Learning Task:** Regression")
+
+    st.write("**Prediction Algorithm:** KNN Regressor")
+
+    st.write("**Interface:** Streamlit")
+
+    st.write("**Dataset:** Diamonds Dataset")
+
+    st.divider()
+
+    st.subheader("📊 Algorithms Compared")
+
+    st.write(
+        """
+        - Linear Regression
+        - Decision Tree Regressor
+        - Random Forest Regressor
+        - KNN Regressor
+        """
+    )
+
+    st.divider()
+
+    st.subheader("🏆 Best Model Performance")
+
+    st.write("**Best Model:** Random Forest Regressor")
+
+    st.metric(
+        "R² Score",
+        "98.14%",
+    )
+
+    st.write(
+        """
+        **MAE:** 272.65
+
+        **RMSE:** 538.46
+        """
+    )
+
+    st.caption(
+        "KNN Regressor is used for actual price prediction "
+        "as required by the project assignment."
+    )
+
+    st.divider()
+
+    st.subheader("📁 Project Information")
+
+    st.write("**Training Split:** 75%")
+
+    st.write("**Testing Split:** 25%")
+
+    st.write(
+        """
+        **Evaluation Metrics:**
+
+        - Mean Absolute Error (MAE)
+        - Root Mean Squared Error (RMSE)
+        - R² Score
+        """
+    )
+
+    st.divider()
+
+    st.subheader("🛠️ Technologies Used")
+
+    st.write(
+        """
+        - Python
+        - Pandas
+        - NumPy
+        - Scikit-learn
+        - Pickle
+        - Altair
+        - Streamlit
+        """
+    )
 
     st.divider()
 
     st.caption(
-        "Diamond Price Prediction | Data Science Project"
+        "Diamond Price Prediction | "
+        "End-to-End Machine Learning Project"
     )
 
 
@@ -776,7 +883,7 @@ st.divider()
 
 st.caption(
     """
-    Developed using Python, Pandas, Scikit-learn,
+    Developed using Python, Pandas, NumPy, Scikit-learn,
     Pickle, Altair and Streamlit.
     """
 )
