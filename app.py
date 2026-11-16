@@ -2,6 +2,7 @@
 import os
 import pickle
 
+import altair as alt
 import pandas as pd
 import streamlit as st
 
@@ -334,8 +335,6 @@ with tab1:
 
         try:
 
-            # Validate diamond measurements
-
             if x <= 0 or y <= 0 or z <= 0:
 
                 st.error(
@@ -349,8 +348,6 @@ with tab1:
                 )
 
             else:
-
-                # Generate KNN prediction
 
                 prediction = model.predict(input_data)
 
@@ -401,8 +398,6 @@ with tab1:
                         hide_index=True,
                     )
 
-                    # Download prediction details
-
                     download_data = input_data.copy()
 
                     download_data["Predicted Price"] = (
@@ -420,9 +415,7 @@ with tab1:
 
         except Exception as e:
 
-            st.error(
-                f"Prediction error: {e}"
-            )
+            st.error(f"Prediction error: {e}")
 
 
 # ==================================================
@@ -452,8 +445,6 @@ with tab2:
                 "RMSE",
                 "R2 Score",
             ]
-
-            # Check required columns
 
             missing_columns = [
                 column
@@ -584,7 +575,7 @@ with tab2:
                     st.divider()
 
                     # ==================================
-                    # R2 SCORE CHART
+                    # R2 SCORE CHART - ALTAIR
                     # ==================================
 
                     st.subheader(
@@ -592,14 +583,33 @@ with tab2:
                     )
 
                     r2_chart = (
-                        comparison_df
-                        .set_index("Model")[["R2 Score"]]
-                        * 100
+                        alt.Chart(comparison_df)
+                        .mark_bar()
+                        .encode(
+                            x=alt.X(
+                                "Model:N",
+                                title="Regression Model",
+                                sort="-y",
+                            ),
+                            y=alt.Y(
+                                "R2 Score:Q",
+                                title="R² Score",
+                                axis=alt.Axis(format=".0%"),
+                            ),
+                            tooltip=[
+                                "Model",
+                                alt.Tooltip(
+                                    "R2 Score:Q",
+                                    format=".4f",
+                                ),
+                            ],
+                        )
+                        .properties(height=350)
                     )
 
-                    st.bar_chart(
+                    st.altair_chart(
                         r2_chart,
-                        y="R2 Score",
+                        use_container_width=True,
                     )
 
                     st.caption(
@@ -609,20 +619,40 @@ with tab2:
                     st.divider()
 
                     # ==================================
-                    # MAE CHART
+                    # MAE CHART - ALTAIR
                     # ==================================
 
                     st.subheader(
                         "📉 MAE Comparison"
                     )
 
-                    mae_chart = comparison_df.set_index(
-                        "Model"
-                    )[["MAE"]]
+                    mae_chart = (
+                        alt.Chart(comparison_df)
+                        .mark_bar()
+                        .encode(
+                            x=alt.X(
+                                "Model:N",
+                                title="Regression Model",
+                                sort="-y",
+                            ),
+                            y=alt.Y(
+                                "MAE:Q",
+                                title="Mean Absolute Error",
+                            ),
+                            tooltip=[
+                                "Model",
+                                alt.Tooltip(
+                                    "MAE:Q",
+                                    format=",.2f",
+                                ),
+                            ],
+                        )
+                        .properties(height=350)
+                    )
 
-                    st.bar_chart(
+                    st.altair_chart(
                         mae_chart,
-                        y="MAE",
+                        use_container_width=True,
                     )
 
                     st.caption(
@@ -632,20 +662,40 @@ with tab2:
                     st.divider()
 
                     # ==================================
-                    # RMSE CHART
+                    # RMSE CHART - ALTAIR
                     # ==================================
 
                     st.subheader(
                         "📉 RMSE Comparison"
                     )
 
-                    rmse_chart = comparison_df.set_index(
-                        "Model"
-                    )[["RMSE"]]
+                    rmse_chart = (
+                        alt.Chart(comparison_df)
+                        .mark_bar()
+                        .encode(
+                            x=alt.X(
+                                "Model:N",
+                                title="Regression Model",
+                                sort="-y",
+                            ),
+                            y=alt.Y(
+                                "RMSE:Q",
+                                title="Root Mean Squared Error",
+                            ),
+                            tooltip=[
+                                "Model",
+                                alt.Tooltip(
+                                    "RMSE:Q",
+                                    format=",.2f",
+                                ),
+                            ],
+                        )
+                        .properties(height=350)
+                    )
 
-                    st.bar_chart(
+                    st.altair_chart(
                         rmse_chart,
-                        y="RMSE",
+                        use_container_width=True,
                     )
 
                     st.caption(
@@ -672,8 +722,8 @@ with tab2:
                     )
 
                     st.info(
-                        """
-                        Random Forest achieved the best
+                        f"""
+                        {best_model['Model']} achieved the best
                         performance in this model comparison.
 
                         The KNN Regressor is used for the
@@ -727,7 +777,7 @@ st.divider()
 st.caption(
     """
     Developed using Python, Pandas, Scikit-learn,
-    Pickle and Streamlit.
+    Pickle, Altair and Streamlit.
     """
 )
 
